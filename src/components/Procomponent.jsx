@@ -8,7 +8,7 @@ export const Procomponent = (props) => {
   const { loggedIn } = useAuth();
 
   const handledelete = async (ide) => {
-    const url = "https://66e527045cc7f9b6273c6d1d.mockapi.io/contact/";
+    const url = "https://6881b47c66a7eb81224b93dd.mockapi.io/p1/p1";
     try {
       const res = await axios.delete(`${url}${ide}`);
       if (res.status === 200 || res.status === 201) {

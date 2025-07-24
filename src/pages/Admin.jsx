@@ -1,18 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navbar } from '../components/Navbar';
-import { Adminblog } from '../pages/Adminblog';
-import { Link } from 'react-router-dom';
-import { Adminproject } from '../pages/Adminproject';
+import { Link, useNavigate } from 'react-router-dom';
 import { PlusIcon } from 'lucide-react';
-import { useAuth } from '../AuthContext'; 
+import { useAuth } from '../AuthContext';
 
 export const Admin = () => {
-  const { setLoggedIn } = useAuth();
+  const { loggedIn, setLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  // Protect the route
+  useEffect(() => {
+    if (!loggedIn) {
+      navigate("/adminlogin"); // redirect if not logged in
+    }
+  }, [loggedIn, navigate]);
 
   const handleLogout = () => {
     setLoggedIn(false);
- 
+    localStorage.removeItem("isAdmin"); // optional: clear persisted login
     console.log("Logged out");
+    navigate("/adminlogin"); // go back to login page
   };
 
   return (

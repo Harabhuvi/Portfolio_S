@@ -5,7 +5,7 @@ import { Procomponent } from '../components/Procomponent';
 import { Loader } from 'lucide-react'; // Import the Loader from lucide-react
 
 export const Projects = () => {
-  const url = "https://66e527045cc7f9b6273c6d1d.mockapi.io/contact";
+  const url = "https://6881b47c66a7eb81224b93dd.mockapi.io/api/p1/Projects";
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true); // State to manage loading
 

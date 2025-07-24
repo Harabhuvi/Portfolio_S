@@ -8,7 +8,7 @@ export const Adminproject = () => {
   const coverref = useRef(null);
   const gitref = useRef(null);
   const previewref = useRef(null);
-  const url = "https://66e527045cc7f9b6273c6d1d.mockapi.io/contact";
+  const url = "https://6881b47c66a7eb81224b93dd.mockapi.io/api/p1/Blogs";
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {

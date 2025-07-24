@@ -8,12 +8,13 @@ import { Admin } from './pages/Admin';
 import { Adminproject } from './pages/Adminproject';
 import { Adminblog } from './pages/Adminblog';
 import { AuthProvider } from './AuthContext';
-
+import {AdminLogin} from './pages/AdminLogin';
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/adminlogin" element={<AdminLogin />} />
           <Route index path='/' element={<Home />} />
           <Route path='/projects' element={<Projects />} />
           <Route path='/contact' element={<Contact />} />

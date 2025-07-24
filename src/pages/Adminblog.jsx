@@ -7,7 +7,7 @@ export const Adminblog = () => {
   const titleref = useRef(null);
   const bodyref = useRef(null);
   const blogref = useRef(null);
-  const url = "https://66e527045cc7f9b6273c6d1d.mockapi.io/Blogs"
+  const url = "https://6881b47c66a7eb81224b93dd.mockapi.io/api/p1/Blogs"
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
