@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Github, Trash } from 'lucide-react';
 import axios from 'axios';
@@ -8,7 +7,7 @@ export const Procomponent = (props) => {
   const { loggedIn } = useAuth();
 
   const handledelete = async (ide) => {
-    const url = "https://6881b47c66a7eb81224b93dd.mockapi.io/p1/p1";
+    const url = "https://6881b47c66a7eb81224b93dd.mockapi.io/api/p1/Projects";
     try {
       const res = await axios.delete(`${url}${ide}`);
       if (res.status === 200 || res.status === 201) {
@@ -55,3 +54,5 @@ export const Procomponent = (props) => {
     </div>
   );
 };
+
+export default Procomponent;

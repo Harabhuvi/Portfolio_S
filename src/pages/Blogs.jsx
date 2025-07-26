@@ -5,7 +5,7 @@ const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
-    axios.get("https://6881b47c66a7eb81224b93dd.mockapi.io/api/p1/Blogs")
+    axios.get("https://6881b47c66a7eb81224b93dd.mockapi.io/api/p1/Projects")
       .then(res => setBlogs(res.data))
       .catch(err => console.error(err));
   }, []);

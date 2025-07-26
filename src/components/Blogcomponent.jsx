@@ -2,11 +2,12 @@ import React from 'react';
 import { Trash } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../AuthContext';
+
 export const Blogcomponent = (props) => {
   const { loggedIn } = useAuth();
 
   const handledelete = async (ide) => {
-    const url = "https://6881b47c66a7eb81224b93dd.mockapi.io/p1/Blogs";
+    const url = "https://6881b47c66a7eb81224b93dd.mockapi.io/api/p1/Projects";
     try {
       const res = await axios.delete(`${url}${ide}`);
       if (res.status === 200 || res.status === 201) {

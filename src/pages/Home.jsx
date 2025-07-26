@@ -134,10 +134,10 @@ export const Home = () => {
     <a href="" target="_blank" rel="noopener noreferrer">
       <Code className="w-8 h-8 hover:text-orange-400 transition duration-200" />
     </a>
-    <a href="" target="_blank" rel="noopener noreferrer">
+    <a href="https://Linkedin.com/in/bhuvaneshwaran-s-abc101" target="_blank" rel="noopener noreferrer">
       <Linkedin className="w-8 h-8 hover:text-blue-400 transition duration-200" />
     </a>
-    <a href="https://github.com/bhuvi2004" target="_blank" rel="noopener noreferrer">
+    <a href="https://github.com/Harabhuvi" target="_blank" rel="noopener noreferrer">
       <Github className="w-8 h-8 hover:text-gray-400 transition duration-200" />
     </a>
   </div>
@@ -151,3 +151,5 @@ export const Home = () => {
     </div>
   );
 };
+
+export default Home;

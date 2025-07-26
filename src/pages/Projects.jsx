@@ -2,26 +2,27 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Navbar } from '../components/Navbar';
 import { Procomponent } from '../components/Procomponent';
-import { Loader } from 'lucide-react'; // Import the Loader from lucide-react
+import { Loader } from 'lucide-react';
 
-export const Projects = () => {
+const Projects = () => {
   const url = "https://6881b47c66a7eb81224b93dd.mockapi.io/api/p1/Projects";
   const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true); // State to manage loading
+  const [loading, setLoading] = useState(true);
 
+  // Fetch all project data
   const fetchData = async () => {
     try {
       const response = await axios.get(url);
       if (response.status === 200 || response.status === 201) {
         setProjects(response.data);
       } else {
-        alert("API error!");
+        alert("Failed to load projects. Please check the API.");
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
-      alert("Failed to fetch projects. Please try again later."); // Update alert message
+      console.error("Error fetching projects:", error);
+      alert("Server error! Please try again later.");
     } finally {
-      setLoading(false); // Set loading to false after fetching
+      setLoading(false);
     }
   };
 
@@ -32,16 +33,19 @@ export const Projects = () => {
   return (
     <div>
       <Navbar />
-      <div className="backdrop-blur-sm">
-        <p className='text-orange-400 font-mono flex items-center justify-center text-4xl'>PROJECTS</p>
-        <div className='flex flex-col justify-center items-center'>
-          {loading ? (
-            <Loader className='text-white animate-spin' /> // Loading icon displayed while loading
-          ) : projects.length > 0 ? (
-            projects.map((item, index) => (
+      <div className="backdrop-blur-sm min-h-screen px-4 py-6">
+        <h1 className="text-orange-400 font-mono text-4xl text-center mb-10">PROJECTS</h1>
+
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <Loader className="text-white animate-spin w-10 h-10" />
+          </div>
+        ) : projects.length > 0 ? (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
+            {projects.map((item, index) => (
               <Procomponent
-                id={item.id}
                 key={index}
+                id={item.id}
                 title={item.Title}
                 description={item.Description}
                 coverlink={item.CoverLink}
@@ -49,11 +53,11 @@ export const Projects = () => {
                 previewlink={item.Previewlink}
                 fetchData={fetchData}
               />
-            ))
-          ) : (
-            <p className="text-gray-600">No projects available.</p> // Message when no projects are found
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-600">No projects available.</p>
+        )}
       </div>
     </div>
   );

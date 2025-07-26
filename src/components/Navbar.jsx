@@ -1,8 +1,8 @@
 import { User2, Menu, X } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
-import { useAuth } from '../AuthContext'; 
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
 export const Navbar = () => {
   const [visible, setVisible] = useState(false);
@@ -10,23 +10,40 @@ export const Navbar = () => {
   const [error, setError] = useState("");
   const idref = useRef(null);
   const passref = useRef(null);
-  
-  const { setLoggedIn } = useAuth();
-  const navigate = useNavigate(); 
 
-  const id = "7"; 
-  const pass = "admin"; 
+  const { loggedIn, setLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  const id = "0";
+  const pass = "admin";
+
+  useEffect(() => {
+    document.body.style.overflow = visible || sidebarVisible ? 'hidden' : 'auto';
+  }, [visible, sidebarVisible]);
 
   const handleLogin = () => {
-    if (idref.current.value === id && passref.current.value === pass) {
+    const enteredId = idref.current.value;
+    const enteredPass = passref.current.value;
+
+    if (!enteredId || !enteredPass) {
+      setError("Please fill all fields.");
+      return;
+    }
+
+    if (enteredId === id && enteredPass === pass) {
       setVisible(false);
       setError("");
       setLoggedIn(true);
       navigate('/admin');
-      console.log("Logged in successfully");
     } else {
-      setError("Wrong Password");
+      setError("Wrong ID or Password");
     }
+  };
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+    localStorage.removeItem("loggedIn");
+    navigate("/adminLogin");
   };
 
   const handleSidebarLinkClick = () => {
@@ -35,70 +52,107 @@ export const Navbar = () => {
 
   return (
     <>
-      <div className="w-full h-[4rem] bg-slate-800 flex justify-between p-5 sticky top-0 z-10">
-        <div className="w-[50%]">
-          <h1 className="font-mono text-blue-50 font-bold text-2xl pb-15 pl-5">Portfolio</h1>
-        </div>
-        <div className="font-serif text-white w-1/2 h-[4rem] hidden md:flex">
-          <ul className="flex">
-            <li className="mr-7 hover:text-blue-400">
-              <Link to="/">Home</Link>
-            </li>
-            <li className="mr-7 hover:text-blue-400">
-              <Link to="/projects">Projects</Link>
-            </li>
-            <li className="mr-7 hover:text-blue-400">
-              <Link to="/blogs">Blogs</Link>
-            </li>
-            <li className="mr-7 hover:text-blue-400">
-              <Link to="/contact">Contact</Link>
-            </li>
-          </ul>
-        </div>
+      {/* Top Navbar */}
+      <div className="w-full h-[4rem] bg-slate-800 flex justify-between items-center p-5 sticky top-0 z-10">
+        <h1 className="font-mono text-blue-50 font-bold text-2xl pl-5">Portfolio</h1>
+
+        <ul className="hidden md:flex font-serif text-white space-x-7">
+          <li className="hover:text-blue-400"><Link to="/">Home</Link></li>
+          <li className="hover:text-blue-400"><Link to="/projects">Projects</Link></li>
+          <li className="hover:text-blue-400"><Link to="/blogs">Blogs</Link></li>
+          <li className="hover:text-blue-400"><Link to="/contact">Contact</Link></li>
+        </ul>
+
+        {/* Admin Login / Logout Icon */}
         <div className="hidden md:block">
-          <User2
-            className="w-8 h-8 hover:text-yellow-400 text-white rounded-xl border-2 border-white"
-            onClick={() => setVisible(true)}
-          />
+          {loggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="text-white border-2 border-red-400 px-3 py-1 rounded hover:bg-red-600"
+            >
+              Logout
+            </button>
+          ) : (
+            <User2
+              className="w-8 h-8 hover:text-yellow-400 text-white border-2 border-white rounded-xl cursor-pointer"
+              onClick={() => setVisible(true)}
+            />
+          )}
         </div>
+
+        {/* Hamburger Icon */}
         <div className="block md:hidden">
           <Menu
-            className="w-8 h-8 text-white"
+            className="w-8 h-8 text-white cursor-pointer"
             onClick={() => setSidebarVisible(true)}
           />
         </div>
       </div>
-      <div className={`fixed top-0 right-0 h-full w-[60%] bg-slate-900 bg-opacity-80 z-20 transform ${sidebarVisible ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300 ease-in-out backdrop-blur-sm`}>
+
+      {/* Sidebar */}
+      <div className={`fixed top-0 right-0 h-full w-[60%] bg-slate-900 bg-opacity-90 z-20 transform ${sidebarVisible ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300 ease-in-out`}>
         <div className="flex justify-end p-4">
-          <X className="text-white w-8 h-8" onClick={() => setSidebarVisible(false)} />
+          <X className="text-white w-8 h-8 cursor-pointer" onClick={() => setSidebarVisible(false)} />
         </div>
         <div className="text-white font-serif text-lg">
           <Link to="/" onClick={handleSidebarLinkClick} className="block p-4 border-b border-slate-600 hover:bg-slate-700">Home</Link>
           <Link to="/projects" onClick={handleSidebarLinkClick} className="block p-4 border-b border-slate-600 hover:bg-slate-700">Projects</Link>
           <Link to="/blogs" onClick={handleSidebarLinkClick} className="block p-4 border-b border-slate-600 hover:bg-slate-700">Blogs</Link>
           <Link to="/contact" onClick={handleSidebarLinkClick} className="block p-4 border-b border-slate-600 hover:bg-slate-700">Contact</Link>
-          <button className="w-full text-left p-4 border-b border-slate-600 hover:bg-slate-700" onClick={() => {
-            setSidebarVisible(false);
-            setVisible(true);
-          }}>
-            Admin Login
-          </button>
+          {loggedIn ? (
+            <button
+              onClick={() => {
+                handleSidebarLinkClick();
+                handleLogout();
+              }}
+              className="w-full text-left p-4 border-b border-slate-600 hover:bg-slate-700"
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                handleSidebarLinkClick();
+                setVisible(true);
+              }}
+              className="w-full text-left p-4 border-b border-slate-600 hover:bg-slate-700"
+            >
+              Admin Login
+            </button>
+          )}
         </div>
       </div>
-      {visible && (
-        <div className="fixed top-0 left-0 w-full h-full z-30 backdrop-blur-sm flex justify-center items-center">
-          <div className="fixed w-[90vw] md:w-[44vw] h-[40vh] flex-col justify-center items-center bg-black border-2 text-white flex z-20 rounded-md">
-            <div className="flex justify-end w-full p-4">
-              <X className="text-red-600 border-2 rounded-full" onClick={() => setVisible(false)} />
-            </div>
-            <p>Codewithbhuvi - Admin login</p>
-            <input ref={idref} className="m-3 rounded-md text-black" placeholder="ID" />
-            <input ref={passref} className="m-3 rounded-md text-black" placeholder="PASSWORD" />
-            <button onClick={handleLogin} className="mb-4 rounded-md bg-green-600 p-2">Login</button>
-            {error && <p className="text-red-500">{error}</p>}
+
+      {/* Admin Login Popup */}
+      {visible && !loggedIn && (
+        <div className="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-center">
+          <div className="w-[90vw] md:w-[400px] p-6 bg-black text-white border-2 rounded-md flex flex-col items-center relative">
+            <X className="absolute top-3 right-3 text-red-600 cursor-pointer" onClick={() => setVisible(false)} />
+            <p className="mb-4 text-xl font-semibold">Admin Login - CodewithBhuvi</p>
+            <input
+              ref={idref}
+              className="m-2 p-2 w-full rounded-md text-black"
+              placeholder="ID"
+              autoComplete="off"
+              onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+            />
+            <input
+              ref={passref}
+              type="password"
+              className="m-2 p-2 w-full rounded-md text-black"
+              placeholder="Password"
+              autoComplete="off"
+              onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+            />
+            <button onClick={handleLogin} className="mt-2 rounded-md bg-green-600 p-2 px-4">
+              Login
+            </button>
+            {error && <p className="text-red-500 mt-2">{error}</p>}
           </div>
         </div>
       )}
     </>
   );
 };
+
+export default Navbar;
