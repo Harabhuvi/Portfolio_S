@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import Contact from './pages/Contact';
-// import hell from 'pages/hell';
 import Blogs from './pages/Blogs';
 import Admin from './pages/Admin';
 import Adminproject from './pages/Adminproject';
@@ -13,7 +12,7 @@ import Error from './pages/Error';
 import AdminLogin from './pages/AdminLogin';
 
 import { AuthProvider } from './AuthContext';
-import ProtectedRoute from './components/ProtectedRoute'; // ⬅️ Extracted to components folder
+import ProtectedRoute from './components/ProtectedRoute'; 
 
 function App() {
   return (
