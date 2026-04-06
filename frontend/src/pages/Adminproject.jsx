@@ -8,7 +8,7 @@ export const Adminproject = () => {
   const coverref = useRef(null);
   const gitref = useRef(null);
   const previewref = useRef(null);
-  const url = "https://6881b47c66a7eb81224b93dd.mockapi.io/api/p1/Projects";
+  const url = `${import.meta.env.VITE_API_BASE_URL}/projects`;
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {

@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --accent:   #f97316;
+  --accent2:  #a855f7;
+  --bg:       #070b14;
+  --glass:    rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+  --text:     #e2e8f0;
+  --muted:    #64748b;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(168, 85, 247, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(249, 115, 22, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(59, 130, 246, 0.06) 0%, transparent 60%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(249,115,22,0.4); border-radius: 99px; }
+
+/* ─── Glass Card ────────────────────────────────────────────── */
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ─── Gradient text ─────────────────────────────────────────── */
+.grad-text {
+  background: linear-gradient(135deg, #f97316 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Glow button ───────────────────────────────────────────── */
+.btn-glow {
+  position: relative;
+  background: linear-gradient(135deg, #f97316, #a855f7);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.625rem 1.5rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.btn-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #a855f7, #f97316);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.btn-glow:hover::after { opacity: 1; }
+.btn-glow span { position: relative; z-index: 1; }
+.btn-glow:hover {
+  box-shadow: 0 0 20px rgba(249,115,22,0.4), 0 0 40px rgba(168,85,247,0.2);
+  transform: translateY(-1px);
+}
+
+/* ─── Outline button ─────────────────────────────────────────── */
+.btn-outline {
+  border: 1px solid rgba(249,115,22,0.5);
+  color: #f97316;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.625rem 1.5rem;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+.btn-outline:hover {
+  background: rgba(249,115,22,0.1);
+  border-color: #f97316;
+  box-shadow: 0 0 15px rgba(249,115,22,0.2);
+  transform: translateY(-1px);
+}
+
+/* ─── Section heading ────────────────────────────────────────── */
+.section-heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Floating orbs ─────────────────────────────────────────── */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: float 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+.orb-1 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(168,85,247,0.15), transparent 70%);
+  top: -100px; left: -100px;
+  animation-delay: 0s;
+}
+.orb-2 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(249,115,22,0.12), transparent 70%);
+  bottom: -80px; right: -80px;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+/* ─── Skill bar ─────────────────────────────────────────────── */
+.skill-bar {
+  height: 6px;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+.skill-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #f97316, #a855f7);
+  transition: width 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Navbar active link ─────────────────────────────────────── */
+.nav-link {
+  position: relative;
+  color: rgba(226,232,240,0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  padding-bottom: 2px;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg, #f97316, #a855f7);
+  border-radius: 99px;
+  transition: width 0.3s ease;
+}
+.nav-link:hover { color: #fff; }
+.nav-link:hover::after { width: 100%; }
+
+/* ─── Card hover lift ─────────────────────────────────────────── */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(249,115,22,0.15);
+}
+
+/* ─── Tag pill ───────────────────────────────────────────────── */
+.tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  border: 1px solid rgba(249,115,22,0.3);
+  color: #f97316;
+  background: rgba(249,115,22,0.08);
+}
+
+/* ─── Input ──────────────────────────────────────────────────── */
+.field {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field::placeholder { color: rgba(100,116,139,0.8); }
+.field:focus {
+  border-color: rgba(249,115,22,0.5);
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.08);
+}
+
+/* ─── Typewriter cursor blink ────────────────────────────────── */
+.Typewriter__cursor { color: #f97316; }
