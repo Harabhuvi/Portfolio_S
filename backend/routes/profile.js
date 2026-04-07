@@ -10,6 +10,12 @@ router.get('/', async (req, res) => {
       profile = new Profile();
       await profile.save();
     }
+    
+    // Auto-repair for old broken production paths
+    if (profile.profilePhoto === '/src/assets/img/bhuvi_official.jpg') {
+      profile.profilePhoto = '/bhuvi_official.jpg';
+      await profile.save();
+    }
     res.json(profile);
   } catch (err) {
     console.error('GET /api/profile error:', err.message);
