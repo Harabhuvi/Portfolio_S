@@ -9,7 +9,7 @@ const profileSchema = new mongoose.Schema({
   location: { type: String, default: 'Coimbatore, India' },
   email: { type: String, default: 'bhuvibhuvanesh101@gmail.com' },
   phone: { type: String, default: '+91 6382475358' },
-  profilePhoto: { type: String, default: '/src/assets/img/bhuvi_official.jpg' },
+  profilePhoto: { type: String, default: '/bhuvi_official.jpg' },
   resumeLink: { type: String, default: '#' },
 }, { timestamps: true });
 
