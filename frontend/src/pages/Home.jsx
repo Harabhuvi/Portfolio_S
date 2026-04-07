@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Navbar } from '../components/Navbar';
-import profile from '../assets/img/bhuvip2.jpg';
+import axios from 'axios';
+import profileImg from '../assets/img/bhuvip2.jpg';
 import java from '../assets/img/java.png';
 import js from '../assets/img/java-script.png';
 import rea from '../assets/img/rea.png';
 import sql from '../assets/img/sql.png';
 import git from '../assets/img/git.png';
 import Typewriter from 'typewriter-effect';
-import { Github, Linkedin, Code, ArrowRight, Download, MapPin, Briefcase, GraduationCap, Award, BookOpen, Star, Heart, Mail, Phone, Zap, Smartphone, Cpu } from 'lucide-react';
+import { Github, Linkedin, Code, ArrowRight, Download, MapPin, Briefcase, GraduationCap, Award, BookOpen, Star, Heart, Mail, Phone, Zap, Smartphone, Cpu, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const SKILL_GROUPS = [
