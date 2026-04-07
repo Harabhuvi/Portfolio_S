@@ -19,7 +19,12 @@ const PORT = process.env.PORT || 5000;
 
 // ── Middleware ──────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000', 'https://portfolio-s-gold.vercel.app'],
+  origin: [
+    'http://localhost:5173', 
+    'http://localhost:3000', 
+    'https://portfolio-s-gold.vercel.app', 
+    'https://portfolio-s-ten-omega.vercel.app'
+  ],
   credentials: true,
 }));
 app.use(express.json());
@@ -38,7 +43,7 @@ app.get('/api/health', (req, res) => {
 
 // ── 404 fallback ─────────────────────────────────────────────────────────────
 app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
+   res.status(404).json({ error: 'Route not found' });
 });
 
 // ── Error handler ─────────────────────────────────────────────────────────────
