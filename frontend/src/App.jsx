@@ -10,6 +10,8 @@ import Adminproject from './pages/Adminproject';
 import Adminblog from './pages/Adminblog';
 import Error from './pages/Error';
 import AdminLogin from './pages/AdminLogin';
+import DSizer from './pages/DSizer';
+import AdminProfile from './pages/AdminProfile';
 
 import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './components/ProtectedRoute'; 
@@ -22,6 +24,7 @@ function App() {
           {/* Public Routes */}
           <Route index path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/dsizer" element={<DSizer />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/hell" element={<hell />} />
           <Route path="/blogs" element={<Blogs />} />
@@ -31,6 +34,7 @@ function App() {
           <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
           <Route path="/adminblog" element={<ProtectedRoute><Adminblog /></ProtectedRoute>} />
           <Route path="/adminproject" element={<ProtectedRoute><Adminproject /></ProtectedRoute>} />
+          <Route path="/adminprofile" element={<ProtectedRoute><AdminProfile /></ProtectedRoute>} />
 
           {/* Fallback Route */}
           <Route path="*" element={<Error />} />

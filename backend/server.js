@@ -12,6 +12,7 @@ const projectsRouter = require('./routes/projects');
 const blogsRouter = require('./routes/blogs');
 const contactRouter = require('./routes/contact');
 const authRouter = require('./routes/auth');
+const profileRouter = require('./routes/profile');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,6 +29,7 @@ app.use('/api/projects', projectsRouter);
 app.use('/api/blogs', blogsRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/profile', profileRouter);
 
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {

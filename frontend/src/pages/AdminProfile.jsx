@@ -1,0 +1,278 @@
+import React, { useState, useEffect } from 'react';
+import { Navbar } from '../components/Navbar';
+import axios from 'axios';
+import { 
+  ArrowLeft, 
+  Save, 
+  User, 
+  Image as ImageIcon, 
+  Mail, 
+  Phone, 
+  MapPin, 
+  FileText, 
+  Type,
+  Loader2,
+  Globe
+} from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { toast, Toaster } from 'sonner';
+
+export const AdminProfile = () => {
+  const [loading, setLoading] = useState(false);
+  const [profile, setProfile] = useState({
+    name: '',
+    tagline: '',
+    headline: '',
+    subHeadline: '',
+    description: '',
+    location: '',
+    email: '',
+    phone: '',
+    profilePhoto: '',
+    resumeLink: ''
+  });
+
+  const url = `${import.meta.env.VITE_API_BASE_URL}/profile`;
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const res = await axios.get(url);
+      setProfile(res.data);
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+      toast.error("Failed to load profile data.");
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfile(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await axios.put(url, profile);
+      if (response.status === 200) {
+        toast.success("Profile updated successfully!");
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error("Failed to update profile.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="relative min-h-screen bg-[#070b14] text-slate-200">
+      <Toaster position="top-center" richColors />
+      <div className="orb orb-1 opacity-40" />
+      <div className="orb orb-2 opacity-20" />
+      <Navbar />
+
+      <main className="relative z-10 pt-24 pb-20 px-6 max-w-4xl mx-auto">
+        {/* Breadcrumbs */}
+        <div className="mb-12">
+          <Link to="/admin" className="inline-flex items-center gap-2 text-slate-500 hover:text-white transition-colors duration-300">
+            <ArrowLeft size={16} />
+            <span className="text-xs font-bold uppercase tracking-widest">Back to Hub</span>
+          </Link>
+          <div className="mt-8">
+            <div className="flex items-center gap-3 mb-2">
+              <User size={24} className="text-blue-500" />
+              <h1 className="text-4xl font-black text-white font-grotesk" style={{fontFamily: 'Space Grotesk, sans-serif'}}>
+                Profile <span className="grad-text">Settings</span>
+              </h1>
+            </div>
+            <p className="text-slate-500">Manage your site-wide personal details and imagery.</p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="glass border border-white/5 rounded-[2.5rem] p-8 lg:p-12 space-y-10 shadow-2xl relative overflow-hidden">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Full Name */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 ml-1">Full Identity</label>
+              <div className="relative group">
+                <Type size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors" />
+                <input 
+                  required 
+                  name="name"
+                  value={profile.name}
+                  onChange={handleChange}
+                  className="field pl-12 bg-white/[0.02]" 
+                  type="text" 
+                  placeholder="Your Full Name"
+                />
+              </div>
+            </div>
+
+            {/* Tagline */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 ml-1">Hero Tagline</label>
+              <div className="relative group">
+                <Globe size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors" />
+                <input 
+                  name="tagline"
+                  value={profile.tagline}
+                  onChange={handleChange}
+                  className="field pl-12 bg-white/[0.02]" 
+                  type="text" 
+                  placeholder="e.g. Available for Hire"
+                />
+              </div>
+            </div>
+
+            {/* Headline */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 ml-1">Hero Headline</label>
+              <div className="relative group">
+                <Type size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors" />
+                <input 
+                  name="headline"
+                  value={profile.headline}
+                  onChange={handleChange}
+                  className="field pl-12 bg-white/[0.02]" 
+                  type="text" 
+                />
+              </div>
+            </div>
+
+            {/* Sub-headline */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 ml-1">Sub-Headline</label>
+              <div className="relative group">
+                <Type size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors" />
+                <input 
+                  name="subHeadline"
+                  value={profile.subHeadline}
+                  onChange={handleChange}
+                  className="field pl-12 bg-white/[0.02]" 
+                  type="text" 
+                />
+              </div>
+            </div>
+
+            {/* Profile Photo */}
+            <div className="md:col-span-2 space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 ml-1">Profile Image URL</label>
+              <div className="relative group">
+                <ImageIcon size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors" />
+                <input 
+                  name="profilePhoto"
+                  value={profile.profilePhoto}
+                  onChange={handleChange}
+                  className="field pl-12 bg-white/[0.02]" 
+                  type="text" 
+                  placeholder="Direct image link or local path"
+                />
+              </div>
+            </div>
+
+            {/* description */}
+            <div className="md:col-span-2 space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 ml-1">Bio/About Me</label>
+              <div className="relative group">
+                <FileText size={18} className="absolute left-4 top-4 text-slate-600 group-focus-within:text-blue-400" />
+                <textarea 
+                  name="description"
+                  value={profile.description}
+                  onChange={handleChange}
+                  rows="4"
+                  className="field pl-12 py-4 bg-white/[0.02] min-h-[120px]" 
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 ml-1">Public Email</label>
+              <div className="relative group">
+                <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400" />
+                <input 
+                  name="email"
+                  value={profile.email}
+                  onChange={handleChange}
+                  className="field pl-12 bg-white/[0.02]" 
+                  type="email" 
+                />
+              </div>
+            </div>
+
+            {/* Phone */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 ml-1">Public Phone</label>
+              <div className="relative group">
+                <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400" />
+                <input 
+                  name="phone"
+                  value={profile.phone}
+                  onChange={handleChange}
+                  className="field pl-12 bg-white/[0.02]" 
+                  type="text" 
+                />
+              </div>
+            </div>
+
+            {/* Location */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 ml-1">Location</label>
+              <div className="relative group">
+                <MapPin size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400" />
+                <input 
+                  name="location"
+                  value={profile.location}
+                  onChange={handleChange}
+                  className="field pl-12 bg-white/[0.02]" 
+                  type="text" 
+                />
+              </div>
+            </div>
+
+            {/* Resume */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 ml-1">Resume Link</label>
+              <div className="relative group">
+                <FileText size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400" />
+                <input 
+                  name="resumeLink"
+                  value={profile.resumeLink}
+                  onChange={handleChange}
+                  className="field pl-12 bg-white/[0.02]" 
+                  type="text" 
+                />
+              </div>
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="btn-glow w-full flex items-center justify-center gap-2 py-5 text-lg disabled:opacity-50"
+          >
+            {loading ? (
+              <>
+                <Loader2 size={24} className="animate-spin" />
+                <span>Optimizing Settings...</span>
+              </>
+            ) : (
+              <>
+                <Save size={24} />
+                <span>Synchronize Changes</span>
+              </>
+            )}
+          </button>
+        </form>
+      </main>
+    </div>
+  );
+};
+
+export default AdminProfile;

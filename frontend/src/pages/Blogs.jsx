@@ -48,8 +48,8 @@ const Blogs = () => {
           <div className="space-y-6">
             {blogs.map((blog) => (
               <Blogcomponent
-                key={blog.id}
-                id={blog.id}
+                key={blog._id}
+                id={blog._id}
                 title={blog.Title}
                 body={blog.Body}
                 blog={blog.Blog}

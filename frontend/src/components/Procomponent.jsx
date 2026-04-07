@@ -2,7 +2,7 @@ import { Trash2, ExternalLink, Eye } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../AuthContext';
 
-export const Procomponent = ({ id, title, description, coverlink, previewlink, fetchData }) => {
+export const Procomponent = ({ id, title, description, coverlink, previewlink, fetchData, category }) => {
   const { loggedIn } = useAuth();
 
   const handleDelete = async () => {
@@ -58,7 +58,7 @@ export const Procomponent = ({ id, title, description, coverlink, previewlink, f
 
       {/* Body */}
       <div className="p-5 flex flex-col flex-1">
-        <span className="tag self-start mb-2">Project</span>
+        <span className="tag self-start mb-2 capitalize">{category || 'Project'}</span>
         <h3 className="text-white font-bold text-lg leading-tight mb-1" style={{fontFamily:'Space Grotesk,sans-serif'}}>
           {title}
         </h3>

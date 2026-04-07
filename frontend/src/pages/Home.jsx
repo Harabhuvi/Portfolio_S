@@ -7,7 +7,7 @@ import rea from '../assets/img/rea.png';
 import sql from '../assets/img/sql.png';
 import git from '../assets/img/git.png';
 import Typewriter from 'typewriter-effect';
-import { Github, Linkedin, Code, ArrowRight, Download, MapPin, Briefcase, GraduationCap, Award, BookOpen, Star, Heart, Mail, Phone } from 'lucide-react';
+import { Github, Linkedin, Code, ArrowRight, Download, MapPin, Briefcase, GraduationCap, Award, BookOpen, Star, Heart, Mail, Phone, Zap, Smartphone, Cpu } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const SKILL_GROUPS = [
@@ -100,9 +100,23 @@ const ACHIEVEMENTS = [
 export const Home = () => {
   const [activeTab, setActiveTab] = useState('skills');
   const [progress, setProgress] = useState({});
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
   const skillsRef = useRef(null);
 
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/profile`);
+        setProfile(res.data);
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
         const map = {};
@@ -116,6 +130,26 @@ export const Home = () => {
     return () => { if (skillsRef.current) observer.unobserve(skillsRef.current); };
   }, []);
 
+  if (loading) return (
+    <div className="min-h-screen bg-[#070b14] flex flex-col items-center justify-center gap-4">
+      <Loader2 className="text-orange-500 animate-spin" size={40} />
+      <p className="text-white/20 text-xs font-black uppercase tracking-[0.4em]">Initializing Portfolio...</p>
+    </div>
+  );
+
+  const heroProfile = profile || {
+    name: 'BHUVANESHWARAN S',
+    tagline: 'Available for Internships',
+    headline: 'BHUVANESHWARAN S',
+    subHeadline: 'Full Stack Developer',
+    description: "I'm a passionate Full Stack Developer currently pursuing B.Tech IT at Sri Shakthi Institute. I specialize in building scalable web and mobile applications with a focus on Drone Technology and Cloud infrastructure.",
+    location: 'Coimbatore, India',
+    email: 'bhuvibhuvanesh101@gmail.com',
+    phone: '+91 6382475358',
+    profilePhoto: profileImg,
+    resumeLink: '#'
+  };
+
   return (
     <div className="relative min-h-screen bg-[#070b14] text-slate-200 selection:bg-orange-500/30">
       <div className="orb orb-1" />
@@ -128,29 +162,29 @@ export const Home = () => {
           <div className="space-y-8 order-2 md:order-1">
             <div className="inline-flex items-center gap-3 glass border border-orange-500/20 rounded-full px-4 py-2">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-white/80">Available for Internships</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-white/80">{heroProfile.tagline}</span>
             </div>
 
             <div className="space-y-4">
               <p className="text-orange-400 font-mono tracking-tighter text-lg">Hello World, I'm</p>
               <h1 className="text-6xl md:text-7xl font-black tracking-tight text-white leading-none font-grotesk" style={{fontFamily: 'Space Grotesk, sans-serif'}}>
-                BHUVANESH<br/><span className="grad-text">WARAN S</span>
+                {heroProfile.headline.split(' ')[0]}<br/><span className="grad-text">{heroProfile.headline.split(' ').slice(1).join(' ')}</span>
               </h1>
               <div className="text-2xl md:text-3xl font-bold text-slate-400 h-10 font-mono">
                 <Typewriter
-                  options={{ strings: ['Full Stack Developer', 'Java Enthusiast', 'UI/UX Designer', 'Drone Tech Specialist'], autoStart: true, loop: true, deleteSpeed: 50 }}
+                  options={{ strings: [heroProfile.subHeadline, 'Java Enthusiast', 'UI/UX Designer', 'Drone Tech Specialist'], autoStart: true, loop: true, deleteSpeed: 50 }}
                 />
               </div>
             </div>
 
             <p className="text-lg text-slate-400 leading-relaxed max-w-xl">
-              I'm a passionate Full Stack Developer currently pursuing B.Tech IT at Sri Shakthi Institute. I specialize in building scalable web and mobile applications with a focus on Drone Technology and Cloud infrastructure.
+              {heroProfile.description}
             </p>
 
             <div className="flex flex-wrap gap-4 text-sm font-medium text-slate-500">
-              <span className="flex items-center gap-2"><MapPin size={16} className="text-orange-500" /> Coimbatore, India</span>
-              <span className="flex items-center gap-2 font-mono"><Mail size={16} className="text-orange-500" /> bhuvibhuvanesh101@gmail.com</span>
-              <span className="flex items-center gap-2"><Phone size={16} className="text-orange-500" /> +91 6382475358</span>
+              <span className="flex items-center gap-2"><MapPin size={16} className="text-orange-500" /> {heroProfile.location}</span>
+              <span className="flex items-center gap-2 font-mono"><Mail size={16} className="text-orange-500" /> {heroProfile.email}</span>
+              <span className="flex items-center gap-2"><Phone size={16} className="text-orange-500" /> {heroProfile.phone}</span>
             </div>
 
             <div className="flex flex-wrap gap-4">
@@ -160,7 +194,7 @@ export const Home = () => {
                   <ArrowRight size={18} />
                 </button>
               </Link>
-              <a href="https://linkedin.com/in/bhuvaneshwaran-undefined-a5249b276" target="_blank" rel="noreferrer">
+              <a href={heroProfile.resumeLink} target="_blank" rel="noreferrer">
                 <button className="btn-outline px-8 py-4 text-base">Linked In</button>
               </a>
             </div>
@@ -170,7 +204,7 @@ export const Home = () => {
             <div className="relative group">
               <div className="absolute -inset-4 bg-gradient-to-tr from-orange-500 to-purple-600 rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
               <div className="relative">
-                <img src={profile} alt="Bhuvi" className="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 border-white/10 shadow-2xl relative z-10" />
+                <img src={heroProfile.profilePhoto} alt={heroProfile.name} className="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 border-white/10 shadow-2xl relative z-10" />
                 <div className="absolute -bottom-4 right-0 glass border border-white/10 px-6 py-3 rounded-2xl shadow-xl z-20">
                   <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Experience</p>
                   <p className="text-xl font-bold grad-text">Undergraduate</p>
@@ -178,6 +212,65 @@ export const Home = () => {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+      
+      {/* ─── Featured Innovation ──────────────────────────────────── */}
+      <section className="relative z-10 py-16 px-6 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <Link to="/projects/dsizer">
+            <div className="glass border border-orange-500/10 rounded-[2.5rem] p-4 group hover:bg-orange-500/[0.02] transition-colors duration-700 overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 blur-[100px] -mr-32 -mt-32 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+              
+              <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16 p-6 lg:p-10">
+                <div className="lg:w-1/2 space-y-6 relative z-10">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-500/10 border border-orange-500/20 rounded-full">
+                    <Zap size={12} className="text-orange-500" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-orange-200">Latest Innovation</span>
+                  </div>
+                  
+                  <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight font-grotesk" style={{fontFamily:'Space Grotesk,sans-serif'}}>
+                    DSizer<span className="grad-text">:</span> The Future of Measurements
+                  </h2>
+                  
+                  <p className="text-slate-400 text-lg leading-relaxed">
+                    Revolutionizing body analysis through computer vision. A full-stack ecosystem featuring real-time gesture tracking and Flutter-powered mobile interfaces.
+                  </p>
+
+                  <div className="flex items-center gap-6 pt-4">
+                    <div className="flex items-center gap-2">
+                       <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-orange-500"><Smartphone size={16} /></div>
+                       <span className="text-xs font-bold text-slate-300">Flutter Mobile</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                       <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-purple-500"><Cpu size={16} /></div>
+                       <span className="text-xs font-bold text-slate-300">FastAPI & OpenCV</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-6">
+                    <button className="btn-glow inline-flex items-center gap-2 px-8 py-4">
+                      <span>Explore Showcase</span>
+                      <ArrowRight size={18} />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="lg:w-1/2 relative">
+                  <div className="relative z-10 flex gap-4 lg:gap-6 items-end scale-90 lg:scale-100 origin-center transition-transform duration-700 group-hover:scale-105">
+                     <div className="glass border border-white/10 rounded-2xl p-2 shadow-2xl shadow-orange-500/10">
+                        <img src="/src/assets/img/dsizer_mobile.png" className="w-[180px] lg:w-[220px] rounded-xl hover:grayscale-0 transition duration-500" alt="DSizer app" />
+                     </div>
+                     <div className="glass border border-white/10 rounded-2xl p-2 shadow-2xl shadow-purple-500/10 hidden sm:block mb-8 translate-y-12">
+                        <img src="/src/assets/img/dsizer_admin.png" className="w-[280px] lg:w-[320px] rounded-xl hover:grayscale-0 transition duration-500" alt="DSizer admin" />
+                     </div>
+                  </div>
+                  {/* Decorative element */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-tr from-orange-500/20 to-purple-600/20 blur-[120px] -z-10 opacity-30" />
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
       </section>
 

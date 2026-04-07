@@ -6,6 +6,7 @@ const projectSchema = new mongoose.Schema({
   CoverLink: { type: String, required: true },
   GitLink: { type: String, required: true },
   Previewlink: { type: String },
+  Category: { type: String, required: true, default: 'Own idea' },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Project', projectSchema);

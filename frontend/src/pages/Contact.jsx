@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Navbar } from '../components/Navbar';
 import { Github, Linkedin, Code, Mail, Phone, Send, Loader2, CheckCircle2 } from 'lucide-react';
@@ -11,6 +11,19 @@ export const Contact = () => {
   
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/profile`);
+        setProfile(res.data);
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,6 +49,11 @@ export const Contact = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const contactProfile = profile || {
+    email: 'bhuvibhuvanesh101@gmail.com',
+    phone: '+91 6382475358',
   };
 
   return (
@@ -66,7 +84,7 @@ export const Contact = () => {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Email</p>
-                  <p className="text-white font-medium">bhuvibhuvanesh101@gmail.com</p>
+                  <p className="text-white font-medium">{contactProfile.email}</p>
                 </div>
               </div>
 
@@ -76,7 +94,7 @@ export const Contact = () => {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Phone</p>
-                  <p className="text-white font-medium">+91 6382475358</p>
+                  <p className="text-white font-medium">{contactProfile.phone}</p>
                 </div>
               </div>
 
@@ -139,7 +157,7 @@ export const Contact = () => {
       </main>
 
       <footer className="relative z-10 border-t border-white/5 py-10 px-6 text-center text-xs font-bold text-slate-700 tracking-[0.4em] uppercase">
-        © 2024 Portfolio_S • Inspired by Innovation
+        © 2026 Portfolio_S • Inspired by Innovation
       </footer>
     </div>
   );
