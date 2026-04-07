@@ -15,6 +15,10 @@ router.get('/', async (req, res) => {
     if (profile.profilePhoto === '/src/assets/img/bhuvi_official.jpg') {
       profile.profilePhoto = '/bhuvi_official.jpg';
       await profile.save();
+    } else if (profile.profilePhoto && !profile.profilePhoto.startsWith('/') && !profile.profilePhoto.startsWith('http')) {
+      // Fix relative paths (missing leading slash)
+      profile.profilePhoto = '/' + profile.profilePhoto;
+      await profile.save();
     }
     res.json(profile);
   } catch (err) {
