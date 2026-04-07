@@ -7,6 +7,8 @@ import js from '../assets/img/java-script.png';
 import rea from '../assets/img/rea.png';
 import sql from '../assets/img/sql.png';
 import git from '../assets/img/git.png';
+import dsizerMobile from '../assets/img/dsizer_mobile.png';
+import dsizerAdmin from '../assets/img/dsizer_admin.png';
 import Typewriter from 'typewriter-effect';
 import { Github, Linkedin, Code, ArrowRight, Download, MapPin, Briefcase, GraduationCap, Award, BookOpen, Star, Heart, Mail, Phone, Zap, Smartphone, Cpu, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -260,10 +262,10 @@ export const Home = () => {
                 <div className="lg:w-1/2 relative">
                   <div className="relative z-10 flex gap-4 lg:gap-6 items-end scale-90 lg:scale-100 origin-center transition-transform duration-700 group-hover:scale-105">
                      <div className="glass border border-white/10 rounded-2xl p-2 shadow-2xl shadow-orange-500/10">
-                        <img src="/src/assets/img/dsizer_mobile.png" className="w-[180px] lg:w-[220px] rounded-xl hover:grayscale-0 transition duration-500" alt="DSizer app" />
+                        <img src={dsizerMobile} className="w-[180px] lg:w-[220px] rounded-xl hover:grayscale-0 transition duration-500" alt="DSizer app" />
                      </div>
                      <div className="glass border border-white/10 rounded-2xl p-2 shadow-2xl shadow-purple-500/10 hidden sm:block mb-8 translate-y-12">
-                        <img src="/src/assets/img/dsizer_admin.png" className="w-[280px] lg:w-[320px] rounded-xl hover:grayscale-0 transition duration-500" alt="DSizer admin" />
+                        <img src={dsizerAdmin} className="w-[280px] lg:w-[320px] rounded-xl hover:grayscale-0 transition duration-500" alt="DSizer admin" />
                      </div>
                   </div>
                   {/* Decorative element */}
