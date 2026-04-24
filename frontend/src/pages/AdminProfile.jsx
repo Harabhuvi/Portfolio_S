@@ -12,7 +12,14 @@ import {
   FileText, 
   Type,
   Loader2,
-  Globe
+  Globe,
+  Plus, 
+  Trash2,
+  List,
+  GraduationCap,
+  Award,
+  BookOpen,
+  Trophy
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast, Toaster } from 'sonner';
@@ -29,7 +36,12 @@ export const AdminProfile = () => {
     email: '',
     phone: '',
     profilePhoto: '',
-    resumeLink: ''
+    resumeLink: '',
+    skills: [],
+    education: [],
+    certifications: [],
+    patents: [],
+    achievements: []
   });
 
   const url = `${import.meta.env.VITE_API_BASE_URL}/profile`;
@@ -51,6 +63,70 @@ export const AdminProfile = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile(prev => ({ ...prev, [name]: value }));
+  };
+
+  // ── Array Management Helpers ────────────────────────────────────────────────
+  
+  const addItem = (field, defaultValue) => {
+    setProfile(prev => ({
+      ...prev,
+      [field]: [...(prev[field] || []), defaultValue]
+    }));
+  };
+
+  const removeItem = (field, index) => {
+    setProfile(prev => ({
+      ...prev,
+      [field]: prev[field].filter((_, i) => i !== index)
+    }));
+  };
+
+  const updateItem = (field, index, value) => {
+    setProfile(prev => {
+      const newList = [...prev[field]];
+      newList[index] = value;
+      return { ...prev, [field]: newList };
+    });
+  };
+
+  const updateNestedItem = (field, index, subField, value) => {
+    setProfile(prev => {
+      const newList = [...(prev[field] || [])];
+      newList[index] = { ...newList[index], [subField]: value };
+      return { ...prev, [field]: newList };
+    });
+  };
+
+  // Specific helpers for Skills
+  const addSkillGroup = () => {
+    addItem('skills', { title: '', skills: [] });
+  };
+
+  const addSkillToGroup = (groupIndex) => {
+    setProfile(prev => {
+      const newSkills = [...prev.skills];
+      newSkills[groupIndex].skills = [...(newSkills[groupIndex].skills || []), { name: '', pct: 0, color: 'from-blue-400 to-indigo-500' }];
+      return { ...prev, skills: newSkills };
+    });
+  };
+
+  const updateSkillInGroup = (groupIndex, skillIndex, subField, value) => {
+    setProfile(prev => {
+      const newSkills = [...prev.skills];
+      newSkills[groupIndex].skills[skillIndex] = { 
+        ...newSkills[groupIndex].skills[skillIndex], 
+        [subField]: value 
+      };
+      return { ...prev, skills: newSkills };
+    });
+  };
+
+  const removeSkillFromGroup = (groupIndex, skillIndex) => {
+    setProfile(prev => {
+      const newSkills = [...prev.skills];
+      newSkills[groupIndex].skills = newSkills[groupIndex].skills.filter((_, i) => i !== skillIndex);
+      return { ...prev, skills: newSkills };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -270,9 +346,186 @@ export const AdminProfile = () => {
             )}
           </button>
         </form>
+
+        {/* ── Additional Sections ────────────────────────────────────────────────── */}
+        <div className="mt-12 space-y-12 pb-24">
+          
+          {/* Skills Section */}
+          <Section 
+            icon={<List className="text-orange-500" />} 
+            title="Professional Skills" 
+            description="Organize your expertise into categories."
+            onAdd={addSkillGroup}
+          >
+            {(profile.skills || []).map((group, gIdx) => (
+              <div key={gIdx} className="glass border border-white/5 p-6 rounded-3xl space-y-6 bg-white/[0.01]">
+                <div className="flex items-center gap-4">
+                  <input 
+                    className="field bg-white/[0.05] font-bold text-orange-400"
+                    placeholder="Group Title (e.g. Front-End)"
+                    value={group.title}
+                    onChange={(e) => updateNestedItem('skills', gIdx, 'title', e.target.value)}
+                  />
+                  <button onClick={() => removeItem('skills', gIdx)} className="p-2 hover:bg-red-500/10 text-red-500 rounded-xl transition-colors">
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+                
+                <div className="pl-6 space-y-4 border-l-2 border-white/5">
+                  {(group.skills || []).map((skill, sIdx) => (
+                    <div key={sIdx} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                      <input 
+                        className="field md:col-span-2 text-sm bg-white/[0.02]"
+                        placeholder="Skill Name"
+                        value={skill.name}
+                        onChange={(e) => updateSkillInGroup(gIdx, sIdx, 'name', e.target.value)}
+                      />
+                      <input 
+                        type="number"
+                        className="field text-sm bg-white/[0.02]"
+                        placeholder="%"
+                        value={skill.pct}
+                        onChange={(e) => updateSkillInGroup(gIdx, sIdx, 'pct', parseInt(e.target.value))}
+                      />
+                      <div className="flex items-center gap-2">
+                        <input 
+                          className="field text-xs bg-white/[0.02] flex-1"
+                          placeholder="Color Class"
+                          value={skill.color}
+                          onChange={(e) => updateSkillInGroup(gIdx, sIdx, 'color', e.target.value)}
+                        />
+                        <button onClick={() => removeSkillFromGroup(gIdx, sIdx)} className="text-red-500/50 hover:text-red-500">
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <button 
+                    onClick={() => addSkillToGroup(gIdx)}
+                    className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-orange-500 transition-colors"
+                  >
+                    <Plus size={14} /> Add Skill
+                  </button>
+                </div>
+              </div>
+            ))}
+          </Section>
+
+          {/* Education Section */}
+          <Section 
+            icon={<GraduationCap className="text-blue-500" />} 
+            title="Academic Background" 
+            description="Your degrees and institutions."
+            onAdd={() => addItem('education', { institution: '', location: '', degree: '', duration: '', score: '' })}
+          >
+            {(profile.education || []).map((edu, idx) => (
+              <div key={idx} className="glass border border-white/5 p-6 rounded-3xl grid grid-cols-2 gap-4">
+                <input className="field col-span-2 font-bold" placeholder="Institution" value={edu.institution} onChange={(e) => updateNestedItem('education', idx, 'institution', e.target.value)} />
+                <input className="field text-sm" placeholder="Degree" value={edu.degree} onChange={(e) => updateNestedItem('education', idx, 'degree', e.target.value)} />
+                <input className="field text-sm" placeholder="Duration" value={edu.duration} onChange={(e) => updateNestedItem('education', idx, 'duration', e.target.value)} />
+                <input className="field text-sm" placeholder="Location" value={edu.location} onChange={(e) => updateNestedItem('education', idx, 'location', e.target.value)} />
+                <input className="field text-sm" placeholder="Score" value={edu.score} onChange={(e) => updateNestedItem('education', idx, 'score', e.target.value)} />
+                <button onClick={() => removeItem('education', idx)} className="col-span-2 py-2 flex items-center justify-center gap-2 text-xs font-bold text-red-500 hover:bg-red-500/5 rounded-xl transition-colors">
+                  <Trash2 size={14} /> Remove Institution
+                </button>
+              </div>
+            ))}
+          </Section>
+
+          {/* Certifications Section */}
+          <Section 
+            icon={<Award className="text-purple-500" />} 
+            title="Certifications" 
+            description="Professional certificates and licenses."
+            onAdd={() => addItem('certifications', '')}
+          >
+            <div className="grid gap-3">
+              {(profile.certifications || []).map((cert, idx) => (
+                <div key={idx} className="flex gap-2">
+                  <input className="field flex-1" placeholder="Certificate Name" value={cert} onChange={(e) => updateItem('certifications', idx, e.target.value)} />
+                  <button onClick={() => removeItem('certifications', idx)} className="p-4 bg-white/5 hover:bg-red-500/10 text-red-500 rounded-2xl transition-colors">
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </Section>
+
+          {/* Patents Section */}
+          <Section 
+            icon={<BookOpen className="text-green-500" />} 
+            title="Patents & Publications" 
+            description="Intellectual property and research."
+            onAdd={() => addItem('patents', { title: '', docket: '', status: '' })}
+          >
+            {(profile.patents || []).map((patent, idx) => (
+              <div key={idx} className="glass border border-white/5 p-6 rounded-3xl space-y-4">
+                <input className="field font-bold" placeholder="Title" value={patent.title} onChange={(e) => updateNestedItem('patents', idx, 'title', e.target.value)} />
+                <div className="grid grid-cols-2 gap-4">
+                  <input className="field text-sm" placeholder="Docket Number" value={patent.docket} onChange={(e) => updateNestedItem('patents', idx, 'docket', e.target.value)} />
+                  <input className="field text-sm" placeholder="Status (e.g. Issued)" value={patent.status} onChange={(e) => updateNestedItem('patents', idx, 'status', e.target.value)} />
+                </div>
+                <button onClick={() => removeItem('patents', idx)} className="w-full py-2 flex items-center justify-center gap-2 text-xs font-bold text-red-500 hover:bg-red-500/5 rounded-xl transition-colors">
+                  <Trash2 size={14} /> Remove Entry
+                </button>
+              </div>
+            ))}
+          </Section>
+
+          {/* Achievements Section */}
+          <Section 
+            icon={<Trophy className="text-yellow-500" />} 
+            title="Key Achievements" 
+            description="Your honors, medals, and recognitions."
+            onAdd={() => addItem('achievements', '')}
+          >
+            <div className="grid gap-3">
+              {(profile.achievements || []).map((item, idx) => (
+                <div key={idx} className="flex gap-2">
+                  <input className="field flex-1" placeholder="Achievement Detail" value={item} onChange={(e) => updateItem('achievements', idx, e.target.value)} />
+                  <button onClick={() => removeItem('achievements', idx)} className="p-4 bg-white/5 hover:bg-red-500/10 text-red-500 rounded-2xl transition-colors">
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </Section>
+        </div>
       </main>
     </div>
   );
 };
+
+const Section = ({ icon, title, description, children, onAdd }) => (
+  <div className="space-y-6">
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2">
+      <div className="flex items-center gap-4">
+        <div className="p-3 bg-white/5 rounded-2xl">
+          {icon}
+        </div>
+        <div>
+          <h2 className="text-2xl font-black text-white uppercase tracking-tighter">{title}</h2>
+          <p className="text-slate-500 text-sm">{description}</p>
+        </div>
+      </div>
+      <button 
+        type="button"
+        onClick={onAdd}
+        className="flex items-center justify-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"
+      >
+        <Plus size={16} /> <span>Initialize New Entry</span>
+      </button>
+    </div>
+    <div className="grid md:grid-cols-2 gap-6">
+      {children}
+    </div>
+    {children.length === 0 && (
+      <div className="p-12 border-2 border-dashed border-white/5 rounded-[2.5rem] flex flex-col items-center justify-center text-slate-700 bg-white/[0.01]">
+        <div className="mb-4 opacity-20">{icon}</div>
+        <p className="text-[10px] font-black uppercase tracking-[0.3em]">No records found</p>
+      </div>
+    )}
+  </div>
+);
 
 export default AdminProfile;

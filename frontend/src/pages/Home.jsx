@@ -13,89 +13,20 @@ import Typewriter from 'typewriter-effect';
 import { Github, Linkedin, Code, ArrowRight, Download, MapPin, Briefcase, GraduationCap, Award, BookOpen, Star, Heart, Mail, Phone, Zap, Smartphone, Cpu, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const SKILL_GROUPS = [
+// We use placeholders if the database is empty
+const DEFAULT_SKILLS = [
   {
     title: 'Front-End',
     skills: [
       { name: 'React JS', pct: 85, color: 'from-cyan-400 to-blue-500' },
       { name: 'Flutter', pct: 75, color: 'from-blue-400 to-indigo-500' },
       { name: 'HTML/CSS', pct: 95, color: 'from-orange-400 to-red-500' },
-      { name: 'Qt/QML', pct: 70, color: 'from-green-400 to-emerald-500' },
-    ]
-  },
-  {
-    title: 'Back-End',
-    skills: [
-      { name: 'Java', pct: 90, color: 'from-orange-500 to-red-600' },
-      { name: 'Node JS / Express', pct: 80, color: 'from-green-500 to-emerald-600' },
-      { name: 'Python', pct: 75, color: 'from-blue-500 to-indigo-600' },
-      { name: 'GraphQL', pct: 70, color: 'from-pink-500 to-purple-600' },
-    ]
-  },
-  {
-    title: 'Database & Auth',
-    skills: [
-      { name: 'MongoDB', pct: 85, color: 'from-green-400 to-emerald-500' },
-      { name: 'MySQL / DBMS', pct: 80, color: 'from-blue-400 to-cyan-500' },
-      { name: 'JWT / Firebase', pct: 85, color: 'from-yellow-400 to-orange-500' },
-    ]
-  },
-  {
-    title: 'Tools & DevOps',
-    skills: [
-      { name: 'Git / GitHub', pct: 90, color: 'from-gray-600 to-gray-800' },
-      { name: 'Docker', pct: 65, color: 'from-blue-500 to-blue-700' },
-      { name: 'AWS / GCloud / Vercel', pct: 70, color: 'from-orange-500 to-yellow-500' },
     ]
   }
 ];
 
-const EDUCATION = [
-  {
-    institution: 'Sri Shakthi Institute of Engineering and Technology',
-    location: 'Coimbatore',
-    degree: 'B.Tech - Information Technology',
-    duration: '2022 — 2026',
-    score: '7.0* CGPA'
-  },
-  {
-    institution: 'Adharsh Vidhyalaya Matric Hr Sec School',
-    location: 'Erode',
-    degree: 'Higher Secondary Certificate (HSC)',
-    duration: '2021 — 2022',
-    score: '76%'
-  },
-  {
-    institution: 'Literacy Matric Hr Sec School',
-    location: 'Erode',
-    degree: 'Secondary School Leaving Certificate (SSLC)',
-    duration: '2020 — 2021',
-    score: '74%'
-  }
-];
-
-const CERTIFICATIONS = [
-  'Aviatricks Pvt Lmt — Full Stack Developer',
-  'Full Stack Development — NoviTech',
-  'Web Development — CodSoft',
-  'C, C++, PYTHON — CSC',
-  'STEP (QA 360) — CDW'
-];
-
-const PATENTS = [
-  {
-    title: 'AI-ENHANCED FINANCIAL BEHAVIOUR ADVISOR',
-    docket: '86040',
-    status: 'Issued June 27 2024'
-  },
-  {
-    title: "THE FLUENT SPEAKER'S GUIDE",
-    docket: '141169',
-    status: 'Issued November 27 2024'
-  }
-];
-
-const ACHIEVEMENTS = [
+// Fallback achievements
+const DEFAULT_ACHIEVEMENTS = [
   'JUDO (2016) — 61st National Games (SGFI) Under 14 Junior Bronze Medalist',
   'JUDO (2017-20) — State Level Gold Medalist'
 ];
@@ -121,9 +52,10 @@ export const Home = () => {
     fetchProfile();
 
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
+      if (entries[0].isIntersecting && profile) {
         const map = {};
-        SKILL_GROUPS.forEach(group => {
+        const skillsToMap = (profile.skills && profile.skills.length > 0) ? profile.skills : DEFAULT_SKILLS;
+        skillsToMap.forEach(group => {
           group.skills.forEach(s => map[s.name] = s.pct);
         });
         setProgress(map);
@@ -299,7 +231,7 @@ export const Home = () => {
           {/* Tab Content: Skills */}
           {activeTab === 'skills' && (
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              {SKILL_GROUPS.map(group => (
+              {((profile.skills && profile.skills.length > 0) ? profile.skills : DEFAULT_SKILLS).map(group => (
                 <div key={group.title} className="glass border border-white/10 p-6 rounded-3xl space-y-6">
                   <h3 className="text-sm font-black uppercase tracking-[0.2em] text-orange-500/80 mb-4">{group.title}</h3>
                   <div className="space-y-6">
@@ -323,7 +255,7 @@ export const Home = () => {
           {/* Tab Content: Education */}
           {activeTab === 'education' && (
             <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in zoom-in-95 duration-500">
-              {EDUCATION.map((edu, idx) => (
+              {(profile.education || []).map((edu, idx) => (
                 <div key={idx} className="glass border border-white/10 p-8 rounded-3xl flex flex-col md:flex-row gap-6 items-start">
                   <div className="bg-orange-500/10 p-4 rounded-2xl">
                     <GraduationCap className="text-orange-500" size={32} />
@@ -347,7 +279,7 @@ export const Home = () => {
           {/* Tab Content: Certifications */}
           {activeTab === 'certifications' && (
             <div className="grid md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-left-4 duration-500">
-              {CERTIFICATIONS.map((cert, idx) => (
+              {(profile.certifications || []).map((cert, idx) => (
                 <div key={idx} className="glass border border-white/10 p-5 rounded-2xl flex items-center gap-4 hover:border-orange-500/40 transition-colors">
                   <Award size={20} className="text-orange-500 shrink-0" />
                   <span className="font-semibold text-slate-300">{cert}</span>
@@ -359,7 +291,7 @@ export const Home = () => {
           {/* Tab Content: Patents */}
           {activeTab === 'patents' && (
             <div className="grid md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-right-4 duration-500">
-              {PATENTS.map((patent, idx) => (
+              {(profile.patents || []).map((patent, idx) => (
                 <div key={idx} className="glass border border-white/10 p-8 rounded-3xl space-y-4">
                   <BookOpen size={24} className="text-orange-500" />
                   <h3 className="text-xl font-bold text-white leading-snug">{patent.title}</h3>
@@ -380,7 +312,7 @@ export const Home = () => {
           <div className="space-y-8">
             <h2 className="text-3xl font-black uppercase tracking-tighter grad-text">Achievements</h2>
             <div className="space-y-4">
-              {ACHIEVEMENTS.map((item, i) => (
+              {((profile.achievements && profile.achievements.length > 0) ? profile.achievements : DEFAULT_ACHIEVEMENTS).map((item, i) => (
                 <div key={i} className="flex gap-4 p-4 glass border border-white/5 rounded-2xl items-center">
                   <div className="w-2 h-2 rounded-full bg-orange-500" />
                   <p className="font-bold text-slate-300">{item}</p>

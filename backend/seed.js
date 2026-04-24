@@ -2,8 +2,117 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const Project = require('./models/Project');
 const Blog = require('./models/Blog');
+const Profile = require('./models/Profile');
 
 const MONGODB_URI = process.env.MONGODB_URI;
+
+const profileData = {
+  name: 'BHUVANESHWARAN S',
+  tagline: 'Available for Internships',
+  headline: 'BHUVANESHWARAN S',
+  subHeadline: 'Full Stack Developer',
+  description: "I'm a passionate Full Stack Developer currently pursuing B.Tech IT at Sri Shakthi Institute. I specialize in building scalable web and mobile applications with a focus on Drone Technology and Cloud infrastructure.",
+  location: 'Coimbatore, India',
+  email: 'bhuvibhuvanesh101@gmail.com',
+  phone: '+91 6382475358',
+  profilePhoto: '/bhuvi_official.jpg',
+  resumeLink: 'https://linkedin.com/in/bhuvaneshwaran-s',
+  skills: [
+    {
+      title: 'FRONT – END',
+      skills: [
+        { name: 'HTML', pct: 95, color: 'from-orange-400 to-red-500' },
+        { name: 'CSS', pct: 90, color: 'from-blue-400 to-indigo-500' },
+        { name: 'REACT JS', pct: 90, color: 'from-cyan-400 to-blue-600' },
+        { name: 'FLUTTER', pct: 85, color: 'from-blue-500 to-cyan-500' },
+        { name: 'QT', pct: 80, color: 'from-green-400 to-emerald-500' }
+      ]
+    },
+    {
+      title: 'BACK – END',
+      skills: [
+        { name: 'JAVA', pct: 90, color: 'from-red-500 to-orange-600' },
+        { name: 'PYTHON', pct: 85, color: 'from-blue-600 to-indigo-700' },
+        { name: 'GRAPHQL', pct: 75, color: 'from-pink-500 to-purple-600' },
+        { name: 'NODE JS', pct: 85, color: 'from-green-500 to-emerald-600' },
+        { name: 'EXPRESS JS', pct: 85, color: 'from-gray-500 to-slate-600' }
+      ]
+    },
+    {
+      title: 'DATABASE',
+      skills: [
+        { name: 'MONGODB', pct: 90, color: 'from-green-500 to-emerald-600' },
+        { name: 'MYSQL', pct: 85, color: 'from-blue-500 to-cyan-600' },
+        { name: 'DBMS', pct: 80, color: 'from-orange-500 to-yellow-600' }
+      ]
+    },
+    {
+      title: 'Authentication & Security',
+      skills: [
+        { name: 'JWT', pct: 90, color: 'from-purple-500 to-indigo-600' },
+        { name: 'Firebase Auth', pct: 90, color: 'from-yellow-400 to-orange-500' },
+        { name: 'Session Management', pct: 85, color: 'from-blue-400 to-blue-600' }
+      ]
+    },
+    {
+      title: 'Tools & DevOps',
+      skills: [
+        { name: 'Git', pct: 95, color: 'from-gray-600 to-black' },
+        { name: 'GitHub', pct: 95, color: 'from-gray-800 to-gray-900' },
+        { name: 'Docker', pct: 75, color: 'from-blue-600 to-blue-800' },
+        { name: 'RESTful APIs', pct: 90, color: 'from-emerald-500 to-teal-600' },
+        { name: 'Postman', pct: 85, color: 'from-orange-500 to-red-600' },
+        { name: 'AWS / Vercel / Render / GCloud', pct: 80, color: 'from-blue-400 to-indigo-500' }
+      ]
+    }
+  ],
+  education: [
+    {
+      institution: 'Sri Shakthi Institute of Engineering and Technology',
+      location: 'Coimbatore',
+      degree: 'BTECH IT (Anna University)',
+      duration: '2022 — 2026',
+      score: '7* CGPA'
+    },
+    {
+      institution: 'Adharsh vidhyalaya Matric Hr Sec School',
+      location: 'Erode',
+      degree: 'Higher Secondary Certificate (State Board)',
+      duration: '2021 — 2022',
+      score: '76%'
+    },
+    {
+      institution: 'Literacy Matric Hr Sec School',
+      location: 'Erode',
+      degree: 'Secondary School Leaving Certificate (State Board)',
+      duration: '2020 — 2021',
+      score: '74%'
+    }
+  ],
+  certifications: [
+    'Aviatricks Pvt Lmt - Full Stack Developer',
+    'Full Stack Development - NoviTech',
+    'Web Development - CodSoft',
+    'C, C++, PYTHON - CSC',
+    'STEP (QA 360) - CDW'
+  ],
+  patents: [
+    {
+      title: 'AI-ENHANCED FINANCIAL BEHAVIOUR ADVISOR',
+      docket: '86040 (Filed June 20, 2024)',
+      status: 'Issued June 27, 2024'
+    },
+    {
+      title: 'THE FLUENT SPEAKER’S GUIDE',
+      docket: '141169 (Filed Nov 25, 2024)',
+      status: 'Issued Nov 27, 2024'
+    }
+  ],
+  achievements: [
+    'JUDO (2016) — 61st National Games (SGFI) Under 14 Junior Browns Medalistist',
+    'JUDO (2017-18-19-20) — State Level Gold Medalist'
+  ]
+};
 
 const projectsData = [
   {
@@ -76,6 +185,12 @@ const seedDB = async () => {
     // Insert new projects
     await Project.insertMany(projectsData);
     console.log('Inserted projects successfully!');
+
+    // Synchronize Profile Data
+    await Profile.deleteMany({});
+    const profile = new Profile(profileData);
+    await profile.save();
+    console.log('Profile data synchronized successfully!');
 
     process.exit(0);
   } catch (err) {
