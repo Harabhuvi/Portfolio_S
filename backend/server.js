@@ -23,7 +23,9 @@ app.use(cors({
     'http://localhost:5173', 
     'http://localhost:3000', 
     'https://portfolio-s-gold.vercel.app', 
-    'https://portfolio-s-ten-omega.vercel.app'
+    'https://portfolio-s-ten-omega.vercel.app',
+    'https://bhuviprofile-101.web.app',
+    'https://bhuvi.buzz'
   ],
   credentials: true,
 }));

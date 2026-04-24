@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "bhuviprofile-101"
+  },
+  "targets": {
+    "portfolio-s": {
+      "hosting": {
+        "portfolio-s": ["portfolio-s"]
+      }
+    }
+  }
+}
