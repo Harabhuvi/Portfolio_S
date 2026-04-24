@@ -50,9 +50,13 @@ export const Home = () => {
       }
     };
     fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    if (!profile) return;
 
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && profile) {
+      if (entries[0].isIntersecting) {
         const map = {};
         const skillsToMap = (profile.skills && profile.skills.length > 0) ? profile.skills : DEFAULT_SKILLS;
         skillsToMap.forEach(group => {
@@ -61,9 +65,10 @@ export const Home = () => {
         setProgress(map);
       }
     }, { threshold: 0.1 });
+
     if (skillsRef.current) observer.observe(skillsRef.current);
     return () => { if (skillsRef.current) observer.unobserve(skillsRef.current); };
-  }, []);
+  }, [profile]);
 
   if (loading) return (
     <div className="min-h-screen bg-[#070b14] flex flex-col items-center justify-center gap-4">
@@ -74,10 +79,10 @@ export const Home = () => {
 
   const heroProfile = profile || {
     name: 'BHUVANESHWARAN S',
-    tagline: 'Available for Internships',
+    tagline: 'Available for jobs',
     headline: 'BHUVANESHWARAN S',
-    subHeadline: 'Full Stack Developer',
-    description: "I'm a passionate Full Stack Developer currently pursuing B.Tech IT at Sri Shakthi Institute. I specialize in building scalable web and mobile applications with a focus on Drone Technology and Cloud infrastructure.",
+    subHeadline: 'Software Engineer',
+    description: "I'm a Software Engineer at Aviatricks Aerolab Private Limited. I specialize in building scalable web and mobile applications with a focus on Drone Technology and Cloud infrastructure.",
     location: 'Coimbatore, India',
     email: 'bhuvibhuvanesh101@gmail.com',
     phone: '+91 6382475358',
@@ -142,7 +147,7 @@ export const Home = () => {
                 <img src={heroProfile.profilePhoto} alt={heroProfile.name} className="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 border-white/10 shadow-2xl relative z-10" />
                 <div className="absolute -bottom-4 right-0 glass border border-white/10 px-6 py-3 rounded-2xl shadow-xl z-20">
                   <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Experience</p>
-                  <p className="text-xl font-bold grad-text">Undergraduate</p>
+                  <p className="text-xl font-bold grad-text">1 Year</p>
                 </div>
               </div>
             </div>

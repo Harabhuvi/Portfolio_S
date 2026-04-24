@@ -8,10 +8,10 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 const profileData = {
   name: 'BHUVANESHWARAN S',
-  tagline: 'Available for Internships',
+  tagline: 'Available for jobs',
   headline: 'BHUVANESHWARAN S',
-  subHeadline: 'Full Stack Developer',
-  description: "I'm a passionate Full Stack Developer currently pursuing B.Tech IT at Sri Shakthi Institute. I specialize in building scalable web and mobile applications with a focus on Drone Technology and Cloud infrastructure.",
+  subHeadline: 'Software Engineer',
+  description: "I'm a Software Engineer at Aviatricks Aerolab Private Limited. I specialize in building scalable web and mobile applications with a focus on Drone Technology and Cloud infrastructure.",
   location: 'Coimbatore, India',
   email: 'bhuvibhuvanesh101@gmail.com',
   phone: '+91 6382475358',
