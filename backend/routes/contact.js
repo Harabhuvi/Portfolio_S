@@ -72,4 +72,18 @@ router.get('/', async (req, res) => {
   }
 });
 
+// DELETE /api/contact/:id — delete a specific message (admin use)
+router.delete('/:id', async (req, res) => {
+    try {
+        const deletedMessage = await Contact.findByIdAndDelete(req.params.id);
+        if (!deletedMessage) {
+            return res.status(404).json({ error: 'Message not found' });
+        }
+        res.json({ message: 'Message deleted successfully' });
+    } catch (err) {
+        console.error('DELETE /api/contact error:', err.message);
+        res.status(500).json({ error: 'Failed to delete message' });
+    }
+});
+
 module.exports = router;

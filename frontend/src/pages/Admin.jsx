@@ -12,7 +12,8 @@ import {
   ArrowUpRight,
   TrendingUp,
   FolderOpen,
-  BookOpen
+  BookOpen,
+  MessageSquare
 } from 'lucide-react';
 import { useAuth } from '../AuthContext';
 import axios from 'axios';
@@ -20,7 +21,7 @@ import axios from 'axios';
 export const Admin = () => {
   const { loggedIn, setLoggedIn } = useAuth();
   const navigate = useNavigate();
-  const [stats, setStats] = useState({ projects: 0, blogs: 0 });
+  const [stats, setStats] = useState({ projects: 0, blogs: 0, messages: 0 });
 
   useEffect(() => {
     if (!loggedIn) {
@@ -32,13 +33,15 @@ export const Admin = () => {
 
   const fetchStats = async () => {
     try {
-      const [projRes, blogRes] = await Promise.all([
+      const [projRes, blogRes, msgRes] = await Promise.all([
         axios.get(`${import.meta.env.VITE_API_BASE_URL}/projects`),
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/blogs`)
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/blogs`),
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/contact`)
       ]);
       setStats({
         projects: projRes.data.length || 0,
-        blogs: blogRes.data.length || 0
+        blogs: blogRes.data.length || 0,
+        messages: msgRes.data.length || 0
       });
     } catch (err) {
       console.error("Error fetching stats:", err);
@@ -69,20 +72,20 @@ export const Admin = () => {
       border: "border-purple-500/20"
     },
     {
+      title: "Messages",
+      count: stats.messages,
+      icon: <MessageSquare className="text-blue-500" size={24} />,
+      link: "/admincontact",
+      color: "from-blue-500/20 to-blue-500/5",
+      border: "border-blue-500/20"
+    },
+    {
       title: "Innovations",
       count: 1, // Featured DSizer
       icon: <TrendingUp className="text-green-500" size={24} />,
       link: "/projects/dsizer",
       color: "from-green-500/20 to-green-500/5",
       border: "border-green-500/20"
-    },
-    {
-      title: "Settings",
-      count: 1,
-      icon: <User className="text-blue-500" size={24} />,
-      link: "/adminprofile",
-      color: "from-blue-500/20 to-blue-500/5",
-      border: "border-blue-500/20"
     }
   ];
 
@@ -118,21 +121,23 @@ export const Admin = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
           {dashboardCards.map((card, idx) => (
-            <div key={idx} className={`glass border ${card.border} rounded-[2rem] p-8 group hover:scale-[1.02] transition-all duration-500`}>
-              <div className="flex justify-between items-start mb-6">
-                <div className={`p-4 bg-gradient-to-br ${card.color} rounded-2xl`}>
-                  {card.icon}
+            <Link key={idx} to={card.link}>
+              <div className={`glass border ${card.border} rounded-[2rem] p-8 group hover:scale-[1.02] transition-all duration-500 h-full`}>
+                <div className="flex justify-between items-start mb-6">
+                  <div className={`p-4 bg-gradient-to-br ${card.color} rounded-2xl`}>
+                    {card.icon}
+                  </div>
+                  <ArrowUpRight size={16} className="text-slate-600 group-hover:text-white transition-colors" />
                 </div>
-                <ArrowUpRight size={16} className="text-slate-600 group-hover:text-white transition-colors" />
+                <h3 className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-1">{card.title}</h3>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-black text-white font-grotesk">{card.count}</span>
+                  <span className="text-xs text-slate-600 font-bold uppercase">Total Live</span>
+                </div>
               </div>
-              <h3 className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-1">{card.title}</h3>
-              <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-black text-white font-grotesk">{card.count}</span>
-                <span className="text-xs text-slate-600 font-bold uppercase">Total Live</span>
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
 
@@ -177,18 +182,35 @@ export const Admin = () => {
               </div>
             </Link>
 
-            <Link to="/adminprofile" className="group">
+            <Link to="/admincontact" className="group">
               <div className="glass border border-white/5 rounded-[2rem] p-8 flex items-center justify-between hover:border-blue-500/30 transition-all duration-500">
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/10 group-hover:scale-110 transition-transform duration-500">
-                    <User size={28} className="text-blue-500" />
+                    <MessageSquare size={28} className="text-blue-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white group-hover:grad-text transition-all duration-300">View Messages</h3>
+                    <p className="text-sm text-slate-500">Read and manage contact form submissions</p>
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
+                  <ArrowUpRight size={20} />
+                </div>
+              </div>
+            </Link>
+
+            <Link to="/adminprofile" className="group">
+              <div className="glass border border-white/5 rounded-[2rem] p-8 flex items-center justify-between hover:border-cyan-500/30 transition-all duration-500">
+                <div className="flex items-center gap-6">
+                  <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/10 group-hover:scale-110 transition-transform duration-500">
+                    <User size={28} className="text-cyan-500" />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white group-hover:grad-text transition-all duration-300">Update Profile</h3>
                     <p className="text-sm text-slate-500">Change headline, photo, contacts and description</p>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
+                <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all duration-500">
                   <ArrowUpRight size={20} />
                 </div>
               </div>

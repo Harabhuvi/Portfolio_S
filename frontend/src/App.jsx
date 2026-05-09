@@ -12,6 +12,7 @@ import Error from './pages/Error';
 import AdminLogin from './pages/AdminLogin';
 import DSizer from './pages/DSizer';
 import AdminProfile from './pages/AdminProfile';
+import AdminContact from './pages/AdminContact';
 
 import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './components/ProtectedRoute'; 
@@ -35,6 +36,7 @@ function App() {
           <Route path="/adminblog" element={<ProtectedRoute><Adminblog /></ProtectedRoute>} />
           <Route path="/adminproject" element={<ProtectedRoute><Adminproject /></ProtectedRoute>} />
           <Route path="/adminprofile" element={<ProtectedRoute><AdminProfile /></ProtectedRoute>} />
+          <Route path="/admincontact" element={<ProtectedRoute><AdminContact /></ProtectedRoute>} />
 
           {/* Fallback Route */}
           <Route path="*" element={<Error />} />
