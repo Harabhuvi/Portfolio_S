@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const Contact = require('../models/Contact');
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
 // ── Transporter Setup ────────────────────────────────────────────────────────
-// We pass a dummy key if undefined to prevent the server from crashing on startup.
-// The email won't send until you add the real key in Render's environment variables.
-const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_key');
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 // POST /api/contact — receive a contact form submission and send email notify
 router.post('/', async (req, res) => {
@@ -22,8 +26,8 @@ router.post('/', async (req, res) => {
     await newMessage.save();
 
     // 2. Send email notification
-    const { data, error } = await resend.emails.send({
-        from: 'Portfolio Contact Form <onboarding@resend.dev>', // Use Resend's testing domain
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
         to: process.env.EMAIL_USER, // Send to yourself
         subject: `📬 Portfolio: New Message from ${Name}`,
         html: `
@@ -39,13 +43,15 @@ router.post('/', async (req, res) => {
                 <p style="font-size: 12px; color: #888;">This message was sent from your portfolio website.</p>
             </div>
         `,
-    });
+    };
 
-    if (error) {
-        console.error('❌ Error sending email:', error);
-    } else {
-        console.log('📧 Email notification sent:', data);
-    }
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('❌ Error sending email:', error);
+        } else {
+            console.log('📧 Email notification sent:', info.response);
+        }
+    });
 
     console.log('📬 New contact message stored in MongoDB:', newMessage);
     res.status(201).json({ message: 'Message received and notification sent. Thank you!' });
