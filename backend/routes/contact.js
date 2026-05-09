@@ -1,10 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const Contact = require('../models/Contact');
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
-// ── Resend Setup ─────────────────────────────────────────────────────────────
-const resend = new Resend(process.env.RESEND_API_KEY);
+// ── Transporter Setup ────────────────────────────────────────────────────────
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 // POST /api/contact — receive a contact form submission and send email notify
 router.post('/', async (req, res) => {
@@ -19,10 +25,9 @@ router.post('/', async (req, res) => {
     const newMessage = new Contact({ Name, Email, Comments });
     await newMessage.save();
 
-    // 2. Send email notification via Resend
-    try {
-      const data = await resend.emails.send({
-        from: 'Portfolio Contact <onboarding@resend.dev>', // Resend testing domain
+    // 2. Send email notification
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
         to: process.env.EMAIL_USER, // Send to yourself
         subject: `📬 Portfolio: New Message from ${Name}`,
         html: `
@@ -38,11 +43,15 @@ router.post('/', async (req, res) => {
                 <p style="font-size: 12px; color: #888;">This message was sent from your portfolio website.</p>
             </div>
         `,
-      });
-      console.log('📧 Email notification sent via Resend:', data);
-    } catch (emailError) {
-      console.error('❌ Error sending email via Resend:', emailError);
-    }
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('❌ Error sending email:', error);
+        } else {
+            console.log('📧 Email notification sent:', info.response);
+        }
+    });
 
     console.log('📬 New contact message stored in MongoDB:', newMessage);
     res.status(201).json({ message: 'Message received and notification sent. Thank you!' });
