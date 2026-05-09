@@ -4,7 +4,9 @@ const Contact = require('../models/Contact');
 const { Resend } = require('resend');
 
 // ── Transporter Setup ────────────────────────────────────────────────────────
-const resend = new Resend(process.env.RESEND_API_KEY);
+// We pass a dummy key if undefined to prevent the server from crashing on startup.
+// The email won't send until you add the real key in Render's environment variables.
+const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_key');
 
 // POST /api/contact — receive a contact form submission and send email notify
 router.post('/', async (req, res) => {
