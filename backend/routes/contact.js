@@ -45,13 +45,14 @@ router.post('/', async (req, res) => {
         `,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.error('❌ Error sending email:', error);
-        } else {
-            console.log('📧 Email notification sent:', info.response);
-        }
-    });
+    try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log('📧 Email notification sent:', info.response);
+    } catch (emailError) {
+        console.error('❌ Error sending email:', emailError);
+        // We still return 201 because the message was saved to MongoDB
+        // but you might want to know it failed.
+    }
 
     console.log('📬 New contact message stored in MongoDB:', newMessage);
     res.status(201).json({ message: 'Message received and notification sent. Thank you!' });
