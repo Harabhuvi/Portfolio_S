@@ -98,7 +98,7 @@ export const Home = () => {
 
       {/* ─── Hero Section ──────────────────────────────────────────── */}
       <section className="relative z-10 min-h-screen flex items-center pt-20 pb-10">
-        <div className="max-w-6xl mx-auto px-6 w-full grid md:grid-cols-2 gap-12 items-center">
+        <div className="max-w-6xl mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 order-2 md:order-1">
             <div className="inline-flex items-center gap-3 glass border border-orange-500/20 rounded-full px-4 py-2">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
@@ -107,10 +107,10 @@ export const Home = () => {
 
             <div className="space-y-4">
               <p className="text-orange-400 font-mono tracking-tighter text-lg">Hello World, I'm</p>
-              <h1 className="text-6xl md:text-7xl font-black tracking-tight text-white leading-none font-grotesk" style={{fontFamily: 'Space Grotesk, sans-serif'}}>
+              <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white leading-none font-grotesk break-words" style={{fontFamily: 'Space Grotesk, sans-serif'}}>
                 {heroProfile.headline.split(' ')[0]}<br/><span className="grad-text">{heroProfile.headline.split(' ').slice(1).join(' ')}</span>
               </h1>
-              <div className="text-2xl md:text-3xl font-bold text-slate-400 h-10 font-mono">
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-400 h-10 font-mono">
                 <Typewriter
                   options={{ strings: [heroProfile.subHeadline, 'Java Enthusiast', 'UI/UX Designer', 'Drone Tech Specialist'], autoStart: true, loop: true, deleteSpeed: 50 }}
                 />
@@ -236,7 +236,7 @@ export const Home = () => {
           {/* Tab Content: Skills */}
           {activeTab === 'skills' && (
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              {((profile.skills && profile.skills.length > 0) ? profile.skills : DEFAULT_SKILLS).map(group => (
+              {((profile?.skills && profile.skills.length > 0) ? profile.skills : DEFAULT_SKILLS).map(group => (
                 <div key={group.title} className="glass border border-white/10 p-6 rounded-3xl space-y-6">
                   <h3 className="text-sm font-black uppercase tracking-[0.2em] text-orange-500/80 mb-4">{group.title}</h3>
                   <div className="space-y-6">
@@ -260,7 +260,7 @@ export const Home = () => {
           {/* Tab Content: Education */}
           {activeTab === 'education' && (
             <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in zoom-in-95 duration-500">
-              {(profile.education || []).map((edu, idx) => (
+              {(profile?.education || []).map((edu, idx) => (
                 <div key={idx} className="glass border border-white/10 p-8 rounded-3xl flex flex-col md:flex-row gap-6 items-start">
                   <div className="bg-orange-500/10 p-4 rounded-2xl">
                     <GraduationCap className="text-orange-500" size={32} />
@@ -284,7 +284,7 @@ export const Home = () => {
           {/* Tab Content: Certifications */}
           {activeTab === 'certifications' && (
             <div className="grid md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-left-4 duration-500">
-              {(profile.certifications || []).map((cert, idx) => (
+              {(profile?.certifications || []).map((cert, idx) => (
                 <div key={idx} className="glass border border-white/10 p-5 rounded-2xl flex items-center gap-4 hover:border-orange-500/40 transition-colors">
                   <Award size={20} className="text-orange-500 shrink-0" />
                   <span className="font-semibold text-slate-300">{cert}</span>
@@ -296,7 +296,7 @@ export const Home = () => {
           {/* Tab Content: Patents */}
           {activeTab === 'patents' && (
             <div className="grid md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-right-4 duration-500">
-              {(profile.patents || []).map((patent, idx) => (
+              {(profile?.patents || []).map((patent, idx) => (
                 <div key={idx} className="glass border border-white/10 p-8 rounded-3xl space-y-4">
                   <BookOpen size={24} className="text-orange-500" />
                   <h3 className="text-xl font-bold text-white leading-snug">{patent.title}</h3>
@@ -317,7 +317,7 @@ export const Home = () => {
           <div className="space-y-8">
             <h2 className="text-3xl font-black uppercase tracking-tighter grad-text">Achievements</h2>
             <div className="space-y-4">
-              {((profile.achievements && profile.achievements.length > 0) ? profile.achievements : DEFAULT_ACHIEVEMENTS).map((item, i) => (
+              {((profile?.achievements && profile.achievements.length > 0) ? profile.achievements : DEFAULT_ACHIEVEMENTS).map((item, i) => (
                 <div key={i} className="flex gap-4 p-4 glass border border-white/5 rounded-2xl items-center">
                   <div className="w-2 h-2 rounded-full bg-orange-500" />
                   <p className="font-bold text-slate-300">{item}</p>
