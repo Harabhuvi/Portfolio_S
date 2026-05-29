@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /adminblog
+Disallow: /adminproject
+Disallow: /adminprofile
+Disallow: /admincontact
+
+Sitemap: https://bhuvi.buzz/sitemap.xml
