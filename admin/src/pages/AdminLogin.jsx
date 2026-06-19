@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { Shield, Loader2, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const AdminLogin = () => {
   const [username, setUsername] = useState('');
@@ -24,7 +23,7 @@ const AdminLogin = () => {
 
       if (res.data.success) {
         setLoggedIn(true);
-        navigate("/admin");
+        navigate("/");
       } else {
         setError("Invalid username or password.");
       }
@@ -41,10 +40,10 @@ const AdminLogin = () => {
       <div className="orb orb-1" />
       <div className="orb orb-2" />
       
-      <Link to="/" className="absolute top-8 left-8 flex items-center gap-2 text-slate-500 hover:text-white transition-colors group">
+      <a href="https://bhuvi.buzz" className="absolute top-8 left-8 flex items-center gap-2 text-slate-500 hover:text-white transition-colors group">
         <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
         <span className="text-sm font-bold uppercase tracking-widest">Back to Portfolio</span>
-      </Link>
+      </a>
 
       <div className="relative z-10 w-full max-w-sm">
         <div className="text-center mb-8">

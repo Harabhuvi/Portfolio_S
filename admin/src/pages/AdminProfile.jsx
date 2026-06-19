@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Navbar } from '../components/Navbar';
+import { AdminNavbar as Navbar } from '../components/AdminNavbar';
 import axios from 'axios';
 import { 
   ArrowLeft, 
@@ -156,7 +156,7 @@ export const AdminProfile = () => {
       <main className="relative z-10 pt-24 pb-20 px-6 max-w-4xl mx-auto">
         {/* Breadcrumbs */}
         <div className="mb-12">
-          <Link to="/admin" className="inline-flex items-center gap-2 text-slate-500 hover:text-white transition-colors duration-300">
+          <Link to="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-white transition-colors duration-300">
             <ArrowLeft size={16} />
             <span className="text-xs font-bold uppercase tracking-widest">Back to Hub</span>
           </Link>

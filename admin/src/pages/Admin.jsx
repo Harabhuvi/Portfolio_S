@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar } from '../components/Navbar';
+import { AdminNavbar as Navbar } from '../components/AdminNavbar';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   PlusIcon, 
@@ -19,13 +19,13 @@ import { useAuth } from '../AuthContext';
 import axios from 'axios';
 
 export const Admin = () => {
-  const { loggedIn, setLoggedIn } = useAuth();
+  const { loggedIn, logout } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState({ projects: 0, blogs: 0, messages: 0 });
 
   useEffect(() => {
     if (!loggedIn) {
-      navigate("/adminlogin");
+      navigate("/login");
     } else {
       fetchStats();
     }
@@ -49,9 +49,9 @@ export const Admin = () => {
   };
 
   const handleLogout = () => {
-    setLoggedIn(false);
+    logout();
     localStorage.removeItem("isAdmin");
-    navigate("/adminlogin");
+    navigate("/login");
   };
 
   const dashboardCards = [
@@ -59,7 +59,7 @@ export const Admin = () => {
       title: "Projects",
       count: stats.projects,
       icon: <Briefcase className="text-orange-500" size={24} />,
-      link: "/adminproject",
+      link: "/projects",
       color: "from-orange-500/20 to-orange-500/5",
       border: "border-orange-500/20"
     },
@@ -67,7 +67,7 @@ export const Admin = () => {
       title: "Blogs",
       count: stats.blogs,
       icon: <PenTool className="text-purple-500" size={24} />,
-      link: "/adminblog",
+      link: "/blogs",
       color: "from-purple-500/20 to-purple-500/5",
       border: "border-purple-500/20"
     },
@@ -75,7 +75,7 @@ export const Admin = () => {
       title: "Messages",
       count: stats.messages,
       icon: <MessageSquare className="text-blue-500" size={24} />,
-      link: "/admincontact",
+      link: "/messages",
       color: "from-blue-500/20 to-blue-500/5",
       border: "border-blue-500/20"
     },
@@ -83,7 +83,8 @@ export const Admin = () => {
       title: "Innovations",
       count: 1, // Featured DSizer
       icon: <TrendingUp className="text-green-500" size={24} />,
-      link: "/projects/dsizer",
+      link: "https://bhuvi.buzz/projects/dsizer",
+      isExternal: true,
       color: "from-green-500/20 to-green-500/5",
       border: "border-green-500/20"
     }
@@ -122,8 +123,8 @@ export const Admin = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          {dashboardCards.map((card, idx) => (
-            <Link key={idx} to={card.link}>
+          {dashboardCards.map((card, idx) => {
+            const cardContent = (
               <div className={`glass border ${card.border} rounded-[2rem] p-8 group hover:scale-[1.02] transition-all duration-500 h-full`}>
                 <div className="flex justify-between items-start mb-6">
                   <div className={`p-4 bg-gradient-to-br ${card.color} rounded-2xl`}>
@@ -137,8 +138,18 @@ export const Admin = () => {
                   <span className="text-xs text-slate-600 font-bold uppercase">Total Live</span>
                 </div>
               </div>
-            </Link>
-          ))}
+            );
+
+            return card.isExternal ? (
+              <a key={idx} href={card.link} target="_blank" rel="noopener noreferrer">
+                {cardContent}
+              </a>
+            ) : (
+              <Link key={idx} to={card.link}>
+                {cardContent}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Quick Actions */}
@@ -148,7 +159,7 @@ export const Admin = () => {
           </h2>
           
           <div className="grid md:grid-cols-2 gap-6">
-            <Link to="/adminproject" className="group">
+            <Link to="/projects" className="group">
               <div className="glass border border-white/5 rounded-[2rem] p-8 flex items-center justify-between hover:border-orange-500/30 transition-all duration-500">
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 rounded-2xl bg-orange-500/10 flex items-center justify-center border border-orange-500/10 group-hover:scale-110 transition-transform duration-500">
@@ -165,7 +176,7 @@ export const Admin = () => {
               </div>
             </Link>
 
-            <Link to="/adminblog" className="group">
+            <Link to="/blogs" className="group">
               <div className="glass border border-white/5 rounded-[2rem] p-8 flex items-center justify-between hover:border-purple-500/30 transition-all duration-500">
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center border border-purple-500/10 group-hover:scale-110 transition-transform duration-500">
@@ -182,7 +193,7 @@ export const Admin = () => {
               </div>
             </Link>
 
-            <Link to="/admincontact" className="group">
+            <Link to="/messages" className="group">
               <div className="glass border border-white/5 rounded-[2rem] p-8 flex items-center justify-between hover:border-blue-500/30 transition-all duration-500">
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/10 group-hover:scale-110 transition-transform duration-500">
@@ -199,7 +210,7 @@ export const Admin = () => {
               </div>
             </Link>
 
-            <Link to="/adminprofile" className="group">
+            <Link to="/profile" className="group">
               <div className="glass border border-white/5 rounded-[2rem] p-8 flex items-center justify-between hover:border-cyan-500/30 transition-all duration-500">
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/10 group-hover:scale-110 transition-transform duration-500">

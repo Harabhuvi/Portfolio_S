@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Navbar } from '../components/Navbar';
+import { AdminNavbar as Navbar } from '../components/AdminNavbar';
 import axios from 'axios';
 import { 
   ArrowLeft, 
@@ -9,7 +9,6 @@ import {
   Hash, 
   Terminal, 
   Globe, 
-  CheckCircle2, 
   Loader2 
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -70,7 +69,7 @@ export const Adminproject = () => {
       <main className="relative z-10 pt-24 pb-20 px-6 max-w-4xl mx-auto">
         {/* Breadcrumbs */}
         <div className="mb-12">
-          <Link to="/admin" className="inline-flex items-center gap-2 text-slate-500 hover:text-white transition-colors duration-300">
+          <Link to="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-white transition-colors duration-300">
             <ArrowLeft size={16} />
             <span className="text-xs font-bold uppercase tracking-widest">Back to Hub</span>
           </Link>
@@ -85,9 +84,8 @@ export const Adminproject = () => {
           </div>
         </div>
 
-        {/* Form Form */}
+        {/* Form */}
         <form onSubmit={handleSubmit} className="glass border border-white/5 rounded-[2.5rem] p-8 lg:p-12 space-y-10 shadow-2xl relative overflow-hidden">
-          {/* Subtle accent icon */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 blur-[80px] -mr-32 -mt-32 pointer-events-none" />
 
           <div className="grid md:grid-cols-2 gap-8">

@@ -1,21 +1,7 @@
 import React from 'react';
-import { Trash2, Clock, BookOpen } from 'lucide-react';
-import axios from 'axios';
-import { useAuth } from '../AuthContext';
+import { Clock, BookOpen } from 'lucide-react';
 
 export const Blogcomponent = ({ id, title, body, blog, fetchData }) => {
-  const { loggedIn } = useAuth();
-
-  const handleDelete = async () => {
-    if (!window.confirm(`Delete "${title}"?`)) return;
-    try {
-      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/blogs/${id}`);
-      fetchData();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const wordCount = blog ? blog.split(' ').length : 0;
   const readTime  = Math.max(1, Math.ceil(wordCount / 200));
 
@@ -32,15 +18,6 @@ export const Blogcomponent = ({ id, title, body, blog, fetchData }) => {
             {title}
           </h2>
         </div>
-        {loggedIn && (
-          <button
-            id={`delete-blog-${id}`}
-            onClick={handleDelete}
-            className="glass border border-red-500/20 rounded-xl p-2 text-red-400/60 hover:text-red-400 hover:border-red-500/40 transition-all flex-shrink-0"
-          >
-            <Trash2 size={15} />
-          </button>
-        )}
       </div>
 
       {/* Subject / subtitle */}

@@ -1,20 +1,7 @@
-import { Trash2, ExternalLink, Eye } from 'lucide-react';
-import axios from 'axios';
-import { useAuth } from '../AuthContext';
+import { ExternalLink, Eye } from 'lucide-react';
+import React from 'react';
 
 export const Procomponent = ({ id, title, description, coverlink, previewlink, fetchData, category }) => {
-  const { loggedIn } = useAuth();
-
-  const handleDelete = async () => {
-    if (!window.confirm(`Delete "${title}"?`)) return;
-    try {
-      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/projects/${id}`);
-      fetchData();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   return (
     <div className="glass border border-white/8 rounded-2xl overflow-hidden card-hover group flex flex-col">
       {/* Cover image */}
@@ -43,16 +30,6 @@ export const Procomponent = ({ id, title, description, coverlink, previewlink, f
           >
             <Eye size={11} /> Live
           </a>
-        )}
-        {/* Delete (admin) */}
-        {loggedIn && (
-          <button
-            id={`delete-project-${id}`}
-            onClick={handleDelete}
-            className="absolute top-3 left-3 glass border border-red-500/30 rounded-lg p-1.5 text-red-400 hover:bg-red-500/20 transition-all"
-          >
-            <Trash2 size={13} />
-          </button>
         )}
       </div>
 
